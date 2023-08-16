@@ -6,6 +6,9 @@ import os
 import glob
 import webbrowser
 
+class Constant:
+    PROTECTIVE_STATE = 4
+    SAFE_STOP_TIME = 3
 
 def main(path):
     csv_files = glob.glob(os.path.join(path, "*.csv"))
@@ -23,7 +26,7 @@ def main(path):
     for f in csv_files:
         df = pd.read_csv(f)
 
-        mask = df['Motion_State'] == 4
+        mask = df['Motion_State'] == Constant.PROTECTIVE_STATE
         mask = mask.astype(int).diff()
 
         # start, end protective stop
@@ -60,7 +63,7 @@ def main(path):
         # legend + color
         bar_color = []
         for time in timedelta_plot:
-            if time >= 3:
+            if time >= Constant.SAFE_STOP_TIME:
                 bar_color.append('red > 3 [s]')
             else:
                 bar_color.append('blue < 3 [s]')
@@ -84,4 +87,4 @@ def main(path):
     webbrowser.open('protective_state.html')
 
 
-main(r"C:\Users\ahmon\Desktop\csv_state")
+main(r"Path of folder")
